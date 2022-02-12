@@ -103,6 +103,7 @@ void SDLWindow::update() {
 	SDL_UpdateTexture(scrtex, NULL, screen->pixels, screen->pitch);
 	SDL_RenderCopy(renderer, scrtex, NULL, NULL);
 	SDL_RenderPresent(renderer);
+	SDL_FillRect(screen, NULL, 0);
 }
 
 bool SDLWindow::loadImages() {
@@ -126,9 +127,12 @@ void SDLWindow::drawString(int x, int y, std::string text, int fontSize, Fonts f
 	case Fonts::COMIC_SANS:
 		font = TTF_OpenFont("./fonts/comic_sans.ttf", fontSize);
 		break;
-	default:
 	case Fonts::ARIAL:
 		font = TTF_OpenFont("./fonts/arial.ttf", fontSize);
+		break;
+	default:
+	case Fonts::CONSOLAS:
+		font = TTF_OpenFont("./fonts/consolas.ttf", fontSize);
 		break;
 	}
 	SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
@@ -138,4 +142,50 @@ void SDLWindow::drawString(int x, int y, std::string text, int fontSize, Fonts f
 	SDL_BlitSurface(surface, NULL, screen, &textRect);
 	SDL_FreeSurface(surface);
 	TTF_CloseFont(font);
+}
+void SDLWindow::drawString(SDL_Rect rect, std::string text, int fontSize, Fonts fontName, SDL_Color color) {
+	switch (fontName)
+	{
+	case Fonts::SANS:
+		font = TTF_OpenFont("./fonts/sans.ttf", fontSize);
+		break;
+	case Fonts::COMIC_SANS:
+		font = TTF_OpenFont("./fonts/comic_sans.ttf", fontSize);
+		break;
+	case Fonts::ARIAL:
+		font = TTF_OpenFont("./fonts/arial.ttf", fontSize);
+		break;
+	default:
+	case Fonts::CONSOLAS:
+		font = TTF_OpenFont("./fonts/consolas.ttf", fontSize);
+		break;
+	}
+	SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+	SDL_Rect textRect;
+	textRect.x = rect.x + (rect.w - surface->w)/2;
+	textRect.y = rect.y + (rect.h - surface->h) / 2;
+	SDL_BlitSurface(surface, NULL, screen, &textRect);
+	SDL_FreeSurface(surface);
+	TTF_CloseFont(font);
+}
+void SDLWindow::drawElement(SDL_Rect rect, ElementDrawType type, std::string text, int droplistNumber) {
+	if (type == ElementDrawType::BUTTON || type == ElementDrawType::DROPLISTMAIN) {
+		drawRectangle(rect, 2, colors.white, colors.dark_gary);
+		if (text != "")
+			drawString(rect, text, 15, Fonts::CONSOLAS, { 255, 255, 255 });
+	}
+	else if (type == ElementDrawType::DROPLIST) {
+		for (int i = 0; i < droplistNumber; i++) {
+			SDL_Rect dropRect;
+			dropRect.x = rect.x;
+			dropRect.y = rect.y + i * rect.h / droplistNumber;
+			dropRect.w = rect.w;
+			dropRect.h = rect.h / droplistNumber;
+			drawRectangle(dropRect, 1, colors.white, colors.dark_gary);
+			if (text != "") {
+				drawString(dropRect, text.substr(0, text.find("+")), 15, Fonts::CONSOLAS, { 255, 255, 255 });
+				text.erase(0, text.find("+") + 1);
+			}
+		}
+	}
 }

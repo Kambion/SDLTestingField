@@ -1,11 +1,12 @@
 ﻿#pragma once
 
 #include "SDL_common.hpp"
+#include "Interface.hpp"
 #include <string_view>
 #include <utility>
 
 enum class Highlight { RED, GREEN, CIRCLE };
-enum class Fonts {ARIAL, SANS, COMIC_SANS};
+enum class Fonts {ARIAL, SANS, COMIC_SANS, CONSOLAS};
 
 class SDLWindow {
 private:	//niezmienne dla user(debil)
@@ -39,10 +40,12 @@ public: //user(debil) może popsuć
 
 	void drawPixel(int x, int y, Uint32 color);
 	void drawString(int x, int y, std::string text, int fontSize, Fonts fontName, SDL_Color color);
+	void drawString(SDL_Rect rect, std::string text, int fontSize, Fonts fontName, SDL_Color color);
 	void drawLine(int x, int y, int l, int dx, int dy, Uint32 color);
 	void drawRectangle(SDL_Rect rect, Uint32 fillColor);
 	void drawRectangle(SDL_Rect rect, int thickness, Uint32 outlineColor, Uint32 fillColor);
 	void drawCircle(int x, int y, int radius, int thickness, Uint32 fillColor);
+	void drawElement(SDL_Rect rect, ElementDrawType type, std::string text, int droplistNumber = 0);
 	void update();
 
 	~SDLWindow(); 
