@@ -145,10 +145,12 @@
   <ItemGroup>
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Program.cpp" />
     <ClCompile Include="SDLgraphics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Interface.hpp" />
+    <ClInclude Include="Program.hpp" />
     <ClInclude Include="SDLgraphics.hpp" />
     <ClInclude Include="SDL_common.hpp" />
   </ItemGroup>
